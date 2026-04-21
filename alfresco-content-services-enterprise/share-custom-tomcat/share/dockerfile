@@ -1,0 +1,18 @@
+ARG SHARE_TOMCAT_TAG
+
+FROM tomcat:${SHARE_TOMCAT_TAG}
+
+# Remove default webapps to make a cleaner image
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+# Copy the Share WAR
+COPY share.war /usr/local/tomcat/webapps/share.war
+
+# Fix shared.loader so Share reads your config
+RUN sed -i 's|^shared.loader=.*|shared.loader=${catalina.base}/shared/classes,${catalina.base}/shared/lib/*.jar|' /usr/local/tomcat/conf/catalina.properties
+
+# Copy Share config
+COPY share-config-custom.xml /usr/local/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml
+
+# Optional: ensure required dirs exist
+RUN mkdir -p /usr/local/tomcat/shared/classes/alfresco/web-extension
