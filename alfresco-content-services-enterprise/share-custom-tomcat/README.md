@@ -3,4 +3,5 @@ In this example, we create a standard ACS deployment - using ACS v7.4. However, 
 You will need to provide the share.war file in the ./share folder and then run
 
 docker compose build
+
 docker compose up -d
